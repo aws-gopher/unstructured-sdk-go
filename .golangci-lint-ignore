@@ -1,0 +1,6 @@
+.git/
+.github/
+.vscode/
+**/*.pb.go
+**/*.gen.go
+**/*_generated.go

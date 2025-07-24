@@ -1,0 +1,78 @@
+# golangci-lint configuration
+# See https://golangci-lint.run/usage/configuration/
+
+version: "2"
+
+# Run configuration
+run:
+  timeout: 5m
+  issues-exit-code: 1
+  tests: true
+  build-tags:
+    - integration
+
+formatters:
+  enable:
+    - goimports      # Checks if the code and import statements are formatted according to the 'goimports' command.
+    - gci            # Checks if code and import statements are formatted, with additional rules.
+
+# Linters configuration
+linters:
+  enable:
+    # auto-fixers
+    - govet         # Vet examines Go source code and reports suspicious constructs
+    - misspell      # Finds commonly misspelled English words in comments
+    - staticcheck   # It's a set of rules from staticcheck
+    - wsl           # Add or remove empty lines
+    - gocritic      # Provides diagnostics that check for bugs, performance and style issues
+    - intrange      # Intrange is a linter to find places where for loops could make use of an integer range
+    - nakedret      # Checks that functions with naked returns are not longer than a maximum size (can be zero)
+    - revive        # Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement of golint
+    - sloglint      # Ensure consistent code style when using log/slog
+    - testifylint   # Checks usage of github.com/stretchr/testify
+    - perfsprint    # Checks that fmt.Sprintf can be replaced with a faster alternative. [auto-fix]
+    - usestdlibvars # A linter that detect the possibility to use variables/constants from the Go standard library. [fast, auto-fix]
+
+    # linters
+    - errcheck                  # Errcheck is a program for checking for unchecked errors in go programs
+    - errchkjson                # Checks types passed to the json encoding functions. Reports unsupported types and reports occurrences where the check for the returned error can be omitted.
+    - gosec                     # Inspects source code for security problems
+    - ineffassign               # Detects when assignments to existing variables are not used
+    - unconvert                 # Remove unnecessary type conversions
+    - unused                    # Checks Go code for unused constants, variables, functions and types
+    - bodyclose                 # BodyClose checks that HTTP response bodies are closed
+    - durationcheck             # DurationCheck checks for two durations multiplied together
+    - errname                   # Checks that sentinel errors are prefixed with the `Err` and error types are suffixed with the `Error`.
+    - exptostd                  # Detects functions from golang.org/x/exp/ that can be replaced by std functions.
+    - gocheckcompilerdirectives # Checks that go compiler directive comments (//go:) are valid. [fast]
+    - loggercheck               # Checks key value pairs for common logger libraries (kitlog,klog,logr,slog,zap).
+    - nestif                    # Reports deeply nested if statements. [fast]
+    - nosprintfhostport         # Checks for misuse of Sprintf to construct a host with port in a URL. [fast]
+    - prealloc                  # Finds slice declarations that could potentially be pre-allocated. [fast]
+    - unparam                   # Reports unused function parameters.
+    - wastedassign              # Finds wasted assignment statements.
+    - wrapcheck                 # Checks that errors returned from external packages are wrapped.
+
+  settings:
+    errcheck:
+      check-type-assertions: false
+      exclude-functions:
+        - io/ioutil.ReadFile
+        - io.Copy(*bytes.Buffer)
+        - io.Copy(os.Stdout)
+        - (io.Closer).Close
+
+# Issues configuration
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  new: false
+  fix: true
+
+# Severity configuration
+severity:
+  default: error
+  rules:
+    - linters:
+        - prealloc
+      severity: notice
