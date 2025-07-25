@@ -1,8 +1,6 @@
 package unstructured
 
-import (
-	"time"
-)
+import "time"
 
 // Job represents a job, which is an execution of a workflow in Unstructured.io.
 type Job struct {

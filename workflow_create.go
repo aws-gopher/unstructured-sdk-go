@@ -10,13 +10,13 @@ import (
 
 // CreateWorkflowRequest represents the request to create a workflow
 type CreateWorkflowRequest struct {
-	Name          string
-	SourceID      *string
-	DestinationID *string
-	WorkflowType  WorkflowType
-	WorkflowNodes []WorkflowNode
-	Schedule      *string
-	ReprocessAll  *bool
+	Name          string         `json:"name"`
+	SourceID      *string        `json:"source_id,omitempty"`
+	DestinationID *string        `json:"destination_id,omitempty"`
+	WorkflowType  WorkflowType   `json:"workflow_type"`
+	WorkflowNodes []WorkflowNode `json:"workflow_nodes,omitempty"`
+	Schedule      *string        `json:"schedule,omitempty"`
+	ReprocessAll  *bool          `json:"reprocess_all,omitempty"`
 }
 
 // CreateWorkflow creates a new workflow

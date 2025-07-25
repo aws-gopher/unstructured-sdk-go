@@ -1,8 +1,6 @@
 package unstructured
 
-import (
-	"time"
-)
+import "time"
 
 // Workflow represents a workflow, which defines a series of processing steps for data in Unstructured.io.
 // A workflow connects sources, destinations, and processing nodes.

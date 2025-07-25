@@ -7,7 +7,7 @@ import (
 )
 
 // ListSources retrieves a list of available source connectors
-func (c *Client) ListSources(ctx context.Context, sourceType *string) ([]Source, error) {
+func (c *Client) ListSources(ctx context.Context, typ string) ([]Source, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
 		c.endpoint.JoinPath("/sources").String(),
@@ -17,9 +17,9 @@ func (c *Client) ListSources(ctx context.Context, sourceType *string) ([]Source,
 		return nil, fmt.Errorf("failed to create HTTP request: %w", err)
 	}
 
-	if sourceType != nil {
+	if typ != "" {
 		q := req.URL.Query()
-		q.Add("source_type", *sourceType)
+		q.Add("source_type", typ)
 		req.URL.RawQuery = q.Encode()
 	}
 

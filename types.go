@@ -1,11 +1,13 @@
 package unstructured
 
+import "time"
+
 // DagNodeConnectionCheck represents a connection check result for a DAG node (source or destination connector).
 type DagNodeConnectionCheck struct {
 	ID         string                `json:"id"`
 	Status     ConnectionCheckStatus `json:"status"`
 	Reason     *string               `json:"reason,omitempty"`
-	CreatedAt  string                `json:"created_at"`
+	CreatedAt  time.Time             `json:"created_at,omitempty"`
 	ReportedAt *string               `json:"reported_at,omitempty"`
 }
 

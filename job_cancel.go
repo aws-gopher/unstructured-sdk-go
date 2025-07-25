@@ -7,10 +7,10 @@ import (
 )
 
 // CancelJob cancels a running job by its ID
-func (c *Client) CancelJob(ctx context.Context, jobID string) error {
+func (c *Client) CancelJob(ctx context.Context, id string) error {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPost,
-		c.endpoint.JoinPath("/jobs", jobID, "cancel").String(),
+		c.endpoint.JoinPath("/jobs", id, "cancel").String(),
 		nil,
 	)
 	if err != nil {

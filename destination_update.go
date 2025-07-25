@@ -22,13 +22,13 @@ func (c *Client) UpdateDestination(ctx context.Context, in UpdateDestinationRequ
 		return nil, fmt.Errorf("failed to marshal config: %w", err)
 	}
 
-	shadow := struct {
+	wrapper := struct {
 		Config json.RawMessage `json:"config"`
 	}{
 		Config: json.RawMessage(config),
 	}
 
-	body, err := json.Marshal(shadow)
+	body, err := json.Marshal(wrapper)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal update request: %w", err)
 	}

@@ -8,10 +8,10 @@ import (
 
 // CreateSourceConnectionCheck initiates a connection check for a source connector by its ID.
 // It returns a DagNodeConnectionCheck with the status of the check.
-func (c *Client) CreateSourceConnectionCheck(ctx context.Context, sourceID string) (*DagNodeConnectionCheck, error) {
+func (c *Client) CreateSourceConnectionCheck(ctx context.Context, id string) (*DagNodeConnectionCheck, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPost,
-		c.endpoint.JoinPath("/sources", sourceID, "connection-check").String(),
+		c.endpoint.JoinPath("/sources", id, "connection-check").String(),
 		nil,
 	)
 	if err != nil {
@@ -28,10 +28,10 @@ func (c *Client) CreateSourceConnectionCheck(ctx context.Context, sourceID strin
 
 // GetSourceConnectionCheck retrieves the status of a connection check for a source connector by its ID.
 // It returns a DagNodeConnectionCheck with the current status and reason if any.
-func (c *Client) GetSourceConnectionCheck(ctx context.Context, sourceID string) (*DagNodeConnectionCheck, error) {
+func (c *Client) GetSourceConnectionCheck(ctx context.Context, id string) (*DagNodeConnectionCheck, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/sources", sourceID, "connection-check").String(),
+		c.endpoint.JoinPath("/sources", id, "connection-check").String(),
 		nil,
 	)
 	if err != nil {

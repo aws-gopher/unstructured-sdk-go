@@ -10,18 +10,19 @@ import (
 
 // UpdateWorkflowRequest represents the request to update a workflow.
 type UpdateWorkflowRequest struct {
-	Name          *string
-	SourceID      *string
-	DestinationID *string
-	WorkflowType  *WorkflowType
-	WorkflowNodes []WorkflowNode
-	Schedule      *string
-	ReprocessAll  *bool
+	ID            string         `json:"-"`
+	Name          *string        `json:"name,omitempty"`
+	SourceID      *string        `json:"source_id,omitempty"`
+	DestinationID *string        `json:"destination_id,omitempty"`
+	WorkflowType  *WorkflowType  `json:"workflow_type,omitempty"`
+	WorkflowNodes []WorkflowNode `json:"workflow_nodes,omitempty"`
+	Schedule      *string        `json:"schedule,omitempty"`
+	ReprocessAll  *bool          `json:"reprocess_all,omitempty"`
 }
 
 // UpdateWorkflow updates the configuration of an existing workflow.
 // It returns the updated workflow.
-func (c *Client) UpdateWorkflow(ctx context.Context, workflowID string, in UpdateWorkflowRequest) (*Workflow, error) {
+func (c *Client) UpdateWorkflow(ctx context.Context, in UpdateWorkflowRequest) (*Workflow, error) {
 	body, err := json.Marshal(in)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal workflow update request: %w", err)
@@ -29,7 +30,7 @@ func (c *Client) UpdateWorkflow(ctx context.Context, workflowID string, in Updat
 
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPut,
-		c.endpoint.JoinPath("/workflows", workflowID).String(),
+		c.endpoint.JoinPath("/workflows", in.ID).String(),
 		bytes.NewReader(body),
 	)
 	if err != nil {

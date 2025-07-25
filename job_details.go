@@ -8,10 +8,10 @@ import (
 
 // GetJobDetails retrieves detailed processing information for a specific job by its ID.
 // It returns a JobDetails struct with node stats and processing status.
-func (c *Client) GetJobDetails(ctx context.Context, jobID string) (*JobDetails, error) {
+func (c *Client) GetJobDetails(ctx context.Context, id string) (*JobDetails, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/jobs", jobID, "details").String(),
+		c.endpoint.JoinPath("/jobs", id, "details").String(),
 		nil,
 	)
 	if err != nil {

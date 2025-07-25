@@ -12,12 +12,12 @@ type RunWorkflowRequest struct {
 }
 
 // RunWorkflow runs a workflow by triggering a new job
-func (c *Client) RunWorkflow(ctx context.Context, workflowID string, _ *RunWorkflowRequest) (*Job, error) {
+func (c *Client) RunWorkflow(ctx context.Context, id string, _ *RunWorkflowRequest) (*Job, error) {
 	// For now, we'll implement a simple version without file uploads
 	// The actual implementation would need multipart form data handling
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPost,
-		c.endpoint.JoinPath("/workflows", workflowID, "run").String(),
+		c.endpoint.JoinPath("/workflows", id, "run").String(),
 		nil,
 	)
 	if err != nil {

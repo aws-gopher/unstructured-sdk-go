@@ -7,10 +7,10 @@ import (
 )
 
 // GetSource retrieves detailed information for a specific source connector by its ID
-func (c *Client) GetSource(ctx context.Context, sourceID string) (*Source, error) {
+func (c *Client) GetSource(ctx context.Context, id string) (*Source, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/sources", sourceID).String(),
+		c.endpoint.JoinPath("/sources", id).String(),
 		nil,
 	)
 	if err != nil {

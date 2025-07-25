@@ -7,10 +7,10 @@ import (
 )
 
 // DeleteWorkflow deletes a workflow by its ID
-func (c *Client) DeleteWorkflow(ctx context.Context, workflowID string) error {
+func (c *Client) DeleteWorkflow(ctx context.Context, id string) error {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodDelete,
-		c.endpoint.JoinPath("/workflows", workflowID).String(),
+		c.endpoint.JoinPath("/workflows", id).String(),
 		nil,
 	)
 	if err != nil {

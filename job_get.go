@@ -7,10 +7,10 @@ import (
 )
 
 // GetJob retrieves detailed information for a specific job by its ID
-func (c *Client) GetJob(ctx context.Context, jobID string) (*Job, error) {
+func (c *Client) GetJob(ctx context.Context, id string) (*Job, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/jobs", jobID).String(),
+		c.endpoint.JoinPath("/jobs", id).String(),
 		nil,
 	)
 	if err != nil {

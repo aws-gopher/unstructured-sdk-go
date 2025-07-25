@@ -10,31 +10,32 @@ import (
 
 // UpdateSourceRequest represents the request to update a source connector.
 type UpdateSourceRequest struct {
+	ID     string
 	Config SourceConfigInput
 }
 
 // UpdateSource updates the configuration of an existing source connector.
 // It returns the updated source connector.
-func (c *Client) UpdateSource(ctx context.Context, sourceID string, in UpdateSourceRequest) (*Source, error) {
+func (c *Client) UpdateSource(ctx context.Context, in UpdateSourceRequest) (*Source, error) {
 	config, err := json.Marshal(in.Config)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal config: %w", err)
 	}
 
-	shadow := struct {
+	wrapper := struct {
 		Config json.RawMessage `json:"config"`
 	}{
 		Config: json.RawMessage(config),
 	}
 
-	body, err := json.Marshal(shadow)
+	body, err := json.Marshal(wrapper)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal update request: %w", err)
 	}
 
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPut,
-		c.endpoint.JoinPath("/sources", sourceID).String(),
+		c.endpoint.JoinPath("/sources", in.ID).String(),
 		bytes.NewReader(body),
 	)
 	if err != nil {

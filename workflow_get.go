@@ -7,10 +7,10 @@ import (
 )
 
 // GetWorkflow retrieves detailed information for a specific workflow by its ID
-func (c *Client) GetWorkflow(ctx context.Context, workflowID string) (*Workflow, error) {
+func (c *Client) GetWorkflow(ctx context.Context, id string) (*Workflow, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/workflows", workflowID).String(),
+		c.endpoint.JoinPath("/workflows", id).String(),
 		nil,
 	)
 	if err != nil {

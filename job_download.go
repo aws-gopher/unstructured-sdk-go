@@ -8,10 +8,10 @@ import (
 )
 
 // DownloadJob downloads the output files from a completed job
-func (c *Client) DownloadJob(ctx context.Context, jobID string) (io.ReadCloser, error) {
+func (c *Client) DownloadJob(ctx context.Context, id string) (io.ReadCloser, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/jobs", jobID, "download").String(),
+		c.endpoint.JoinPath("/jobs", id, "download").String(),
 		nil,
 	)
 	if err != nil {
