@@ -9,11 +9,10 @@ import (
 )
 
 // CreateSourceRequest represents a request to create a new source connector.
-// It contains the name, description, and configuration for the source.
+// It contains the name and configuration for the source.
 type CreateSourceRequest struct {
-	Name        string
-	Description string
-	Config      SourceConfigInput
+	Name   string
+	Config SourceConfigInput
 }
 
 // SourceConfigInput is an interface that all source connector configurations must implement.
