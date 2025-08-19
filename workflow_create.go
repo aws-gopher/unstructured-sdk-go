@@ -28,7 +28,7 @@ func (c *Client) CreateWorkflow(ctx context.Context, in CreateWorkflowRequest) (
 
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPost,
-		c.endpoint.JoinPath("/workflows").String(),
+		c.endpoint.JoinPath("/workflows/").String(),
 		bytes.NewReader(body),
 	)
 	if err != nil {

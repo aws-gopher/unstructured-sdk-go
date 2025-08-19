@@ -10,7 +10,7 @@ type Workflow struct {
 	Sources       []string          `json:"sources"`
 	Destinations  []string          `json:"destinations"`
 	WorkflowType  *WorkflowType     `json:"workflow_type,omitempty"`
-	WorkflowNodes []WorkflowNode    `json:"workflow_nodes"`
+	WorkflowNodes WorkflowNodes     `json:"workflow_nodes"`
 	Schedule      *WorkflowSchedule `json:"schedule,omitempty"`
 	Status        WorkflowState     `json:"status"`
 	CreatedAt     time.Time         `json:"created_at,omitzero"`
@@ -41,15 +41,6 @@ const (
 	// WorkflowStateInactive indicates the workflow is inactive.
 	WorkflowStateInactive WorkflowState = "inactive"
 )
-
-// WorkflowNode represents a node in a workflow, such as a partitioner, chunker, or embedder.
-type WorkflowNode struct {
-	ID       *string                `json:"id,omitempty"`
-	Name     string                 `json:"name"`
-	Type     string                 `json:"type"`
-	Subtype  string                 `json:"subtype"`
-	Settings map[string]interface{} `json:"settings,omitempty"`
-}
 
 // WorkflowSchedule represents a workflow schedule, which can include cron tab entries.
 type WorkflowSchedule struct {
