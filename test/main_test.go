@@ -1,3 +1,5 @@
+//go:build integration
+
 package test
 
 import (
@@ -14,7 +16,10 @@ import (
 )
 
 func TestWorkflow(t *testing.T) {
-	t.Skip()
+	key := os.Getenv("UNSTRUCTURED_API_KEY")
+	if key == "" {
+		t.Skip("skipping because UNSTRUCTURED_API_KEY is not set")
+	}
 
 	pretty := func(v any) string {
 		data, err := json.MarshalIndent(v, "", "  ")
@@ -26,13 +31,7 @@ func TestWorkflow(t *testing.T) {
 	}
 
 	client, err := unstructured.New(
-		// unstructured.WithClient(&http.Client{
-		//	Transport: &teert{
-		//		next: http.DefaultTransport,
-		//		dst:  t.Output(),
-		//	},
-		// }),
-		unstructured.WithKey(os.Getenv("UNSTRUCTURED_API_KEY")),
+		unstructured.WithKey(key),
 	)
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
@@ -57,7 +56,7 @@ func TestWorkflow(t *testing.T) {
 
 	t.Cleanup(func() { _ = client.DeleteWorkflow(ctx, workflow.ID) })
 
-	// get all the dir under ./testdata and use them in a call to run the workflow.
+	// get all the files under ./testdata and use them in a call to run the workflow.
 	dir, err := os.ReadDir("testdata")
 	if err != nil {
 		t.Fatalf("failed to read testdata: %v", err)
