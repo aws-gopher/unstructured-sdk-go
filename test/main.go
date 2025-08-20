@@ -63,7 +63,12 @@ func NewMux() *Mux {
 			if f != nil && *f != nil {
 				(*f)(w, r)
 			} else {
-				w.WriteHeader(http.StatusMethodNotAllowed)
+				var msg string
+				if r.Pattern != "" {
+					msg = "handler for " + r.Pattern + " is nil"
+				}
+
+				http.Error(w, msg, http.StatusMethodNotAllowed)
 			}
 		}
 	}

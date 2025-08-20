@@ -33,7 +33,7 @@ func (c *Client) CreateDestination(ctx context.Context, in CreateDestinationRequ
 
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPost,
-		c.endpoint.JoinPath("/destinations/").String(),
+		c.endpoint.JoinPath("destinations/").String(),
 		bytes.NewReader(body),
 	)
 	if err != nil {

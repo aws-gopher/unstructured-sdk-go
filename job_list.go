@@ -16,7 +16,7 @@ type ListJobsRequest struct {
 func (c *Client) ListJobs(ctx context.Context, in *ListJobsRequest) ([]Job, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/jobs").String(),
+		c.endpoint.JoinPath("jobs", "").String(),
 		nil,
 	)
 	if err != nil {

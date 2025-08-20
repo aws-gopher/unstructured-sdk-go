@@ -42,7 +42,7 @@ func (f *FileBytes) Read(p []byte) (n int, err error) {
 func (c *Client) RunWorkflow(ctx context.Context, in *RunWorkflowRequest) (*Job, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPost,
-		c.endpoint.JoinPath("/workflows", in.ID, "run").String(),
+		c.endpoint.JoinPath("workflows", in.ID, "run").String(),
 		nil,
 	)
 	if err != nil {

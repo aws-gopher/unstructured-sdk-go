@@ -10,7 +10,7 @@ import (
 func (c *Client) GetDestination(ctx context.Context, id string) (*Destination, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/destinations", id).String(),
+		c.endpoint.JoinPath("destinations", id).String(),
 		nil,
 	)
 	if err != nil {

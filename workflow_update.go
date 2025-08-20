@@ -30,7 +30,7 @@ func (c *Client) UpdateWorkflow(ctx context.Context, in UpdateWorkflowRequest) (
 
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPut,
-		c.endpoint.JoinPath("/workflows", in.ID).String(),
+		c.endpoint.JoinPath("workflows", in.ID).String(),
 		bytes.NewReader(body),
 	)
 	if err != nil {

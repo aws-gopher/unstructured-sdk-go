@@ -18,7 +18,7 @@ type DownloadJobRequest struct {
 func (c *Client) DownloadJob(ctx context.Context, in DownloadJobRequest) (io.ReadCloser, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/jobs", in.JobID, "download").String(),
+		c.endpoint.JoinPath("jobs", in.JobID, "download").String(),
 		nil,
 	)
 	if err != nil {

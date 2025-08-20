@@ -10,7 +10,7 @@ import (
 func (c *Client) CancelJob(ctx context.Context, id string) error {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPost,
-		c.endpoint.JoinPath("/jobs", id, "cancel").String(),
+		c.endpoint.JoinPath("jobs", id, "cancel").String(),
 		nil,
 	)
 	if err != nil {

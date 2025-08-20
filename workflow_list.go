@@ -30,7 +30,7 @@ type ListWorkflowsRequest struct {
 func (c *Client) ListWorkflows(ctx context.Context, in *ListWorkflowsRequest) ([]Workflow, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/workflows").String(),
+		c.endpoint.JoinPath("workflows").String(),
 		nil,
 	)
 	if err != nil {

@@ -35,7 +35,7 @@ func (c *Client) UpdateSource(ctx context.Context, in UpdateSourceRequest) (*Sou
 
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPut,
-		c.endpoint.JoinPath("/sources", in.ID).String(),
+		c.endpoint.JoinPath("sources", in.ID).String(),
 		bytes.NewReader(body),
 	)
 	if err != nil {
