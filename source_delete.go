@@ -10,7 +10,7 @@ import (
 func (c *Client) DeleteSource(ctx context.Context, id string) error {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodDelete,
-		c.endpoint.JoinPath("/sources", id).String(),
+		c.endpoint.JoinPath("sources", id).String(),
 		nil,
 	)
 	if err != nil {

@@ -34,3 +34,16 @@ type ValidationError struct {
 func (e *ValidationError) Error() string {
 	return fmt.Sprintf("%s at %v: %s", e.Type, e.Location, e.Message)
 }
+
+// APIError represents an error returned by the API when a non-200 status code is returned.
+type APIError struct {
+	Code int
+	Err  error
+}
+
+// Error returns a string representation of the API error.
+func (e *APIError) Error() string {
+	return fmt.Sprintf("an API error occurred: [%d] %s", e.Code, e.Err.Error())
+}
+
+func (e *APIError) Unwrap() error { return e.Err }

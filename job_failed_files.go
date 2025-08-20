@@ -11,7 +11,7 @@ import (
 func (c *Client) GetJobFailedFiles(ctx context.Context, id string) (*JobFailedFiles, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/jobs", id, "failed-files").String(),
+		c.endpoint.JoinPath("jobs", id, "failed-files").String(),
 		nil,
 	)
 	if err != nil {

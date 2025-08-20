@@ -10,7 +10,7 @@ import (
 func (c *Client) ListSources(ctx context.Context, typ string) ([]Source, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/sources").String(),
+		c.endpoint.JoinPath("sources").String(),
 		nil,
 	)
 	if err != nil {

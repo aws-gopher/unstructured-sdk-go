@@ -1,6 +1,11 @@
 package unstructured
 
-import "time"
+import (
+	"encoding/json"
+	"fmt"
+	"strings"
+	"time"
+)
 
 // Job represents a job, which is an execution of a workflow in Unstructured.io.
 type Job struct {
@@ -13,6 +18,32 @@ type Job struct {
 	InputFileIDs    []string           `json:"input_file_ids,omitempty"`
 	OutputNodeFiles []NodeFileMetadata `json:"output_node_files,omitempty"`
 	JobType         WorkflowJobType    `json:"job_type"`
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (j *Job) UnmarshalJSON(data []byte) error {
+	type mask Job
+
+	shadowed := struct {
+		*mask
+		CreatedAt string `json:"created_at,omitempty"`
+	}{
+		mask: (*mask)(j),
+	}
+	if err := json.Unmarshal(data, &shadowed); err != nil {
+		return fmt.Errorf("failed to unmarshal job: %w", err)
+	}
+
+	if shadowed.CreatedAt != "" {
+		t, err := time.Parse("2006-01-02T15:04:05", strings.TrimSuffix(shadowed.CreatedAt, "Z"))
+		if err != nil {
+			return fmt.Errorf("failed to parse job creation time: %w", err)
+		}
+
+		j.CreatedAt = t
+	}
+
+	return nil
 }
 
 // JobStatus represents the status of a job (e.g., scheduled, in progress, completed, stopped, failed).

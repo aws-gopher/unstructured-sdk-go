@@ -10,7 +10,7 @@ import (
 func (c *Client) ListDestinations(ctx context.Context, typ string) ([]Destination, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/destinations").String(),
+		c.endpoint.JoinPath("destinations").String(),
 		nil,
 	)
 	if err != nil {

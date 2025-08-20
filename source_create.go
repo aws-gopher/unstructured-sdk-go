@@ -47,7 +47,7 @@ func (c *Client) CreateSource(ctx context.Context, in CreateSourceRequest) (*Sou
 
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPost,
-		c.endpoint.JoinPath("/sources").String(),
+		c.endpoint.JoinPath("sources/").String(),
 		bytes.NewReader(body),
 	)
 	if err != nil {

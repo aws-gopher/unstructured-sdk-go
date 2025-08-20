@@ -10,7 +10,7 @@ import (
 func (c *Client) DeleteWorkflow(ctx context.Context, id string) error {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodDelete,
-		c.endpoint.JoinPath("/workflows", id).String(),
+		c.endpoint.JoinPath("workflows", id).String(),
 		nil,
 	)
 	if err != nil {

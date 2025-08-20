@@ -3,7 +3,9 @@ package unstructured
 import (
 	"cmp"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -51,6 +53,15 @@ func WithKey(key string) Option {
 			rt:  cmp.Or(c.hc.Transport, http.DefaultTransport),
 		}
 
+		return nil
+	}
+}
+
+// WithClient returns an Option that sets the HTTP client to use for requests.
+// If no client is provided, the client will default to [http.DefaultClient].
+func WithClient(hc *http.Client) Option {
+	return func(c *Client) error {
+		c.hc = hc
 		return nil
 	}
 }
@@ -104,17 +115,26 @@ func (c *Client) do(req *http.Request, out any) error {
 	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return fmt.Errorf("failed to read response body: %w", err)
+		}
+
 		// Handle 422 validation errors specifically
 		if resp.StatusCode == http.StatusUnprocessableEntity {
 			var validationErr HTTPValidationError
-			if err := json.NewDecoder(resp.Body).Decode(&validationErr); err != nil {
-				return fmt.Errorf("failed to decode validation error response: %w", err)
+			if err := json.Unmarshal(body, &validationErr); err == nil {
+				return &APIError{
+					Code: resp.StatusCode,
+					Err:  &validationErr,
+				}
 			}
-
-			return &validationErr
 		}
 
-		return fmt.Errorf("unsuccessful response: %s", resp.Status)
+		return &APIError{
+			Code: resp.StatusCode,
+			Err:  errors.New(string(body)),
+		}
 	}
 
 	if out != nil {

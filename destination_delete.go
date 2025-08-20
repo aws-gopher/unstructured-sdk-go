@@ -10,7 +10,7 @@ import (
 func (c *Client) DeleteDestination(ctx context.Context, id string) error {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodDelete,
-		c.endpoint.JoinPath("/destinations", id).String(),
+		c.endpoint.JoinPath("destinations", id).String(),
 		nil,
 	)
 	if err != nil {

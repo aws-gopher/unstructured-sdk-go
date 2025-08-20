@@ -11,7 +11,7 @@ import (
 func (c *Client) CreateDestinationConnectionCheck(ctx context.Context, id string) (*DagNodeConnectionCheck, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPost,
-		c.endpoint.JoinPath("/destinations", id, "connection-check").String(),
+		c.endpoint.JoinPath("destinations", id, "connection-check").String(),
 		nil,
 	)
 	if err != nil {
@@ -31,7 +31,7 @@ func (c *Client) CreateDestinationConnectionCheck(ctx context.Context, id string
 func (c *Client) GetDestinationConnectionCheck(ctx context.Context, id string) (*DagNodeConnectionCheck, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/destinations", id, "connection-check").String(),
+		c.endpoint.JoinPath("destinations", id, "connection-check").String(),
 		nil,
 	)
 	if err != nil {

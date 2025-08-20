@@ -10,7 +10,7 @@ import (
 func (c *Client) GetWorkflow(ctx context.Context, id string) (*Workflow, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/workflows", id).String(),
+		c.endpoint.JoinPath("workflows", id).String(),
 		nil,
 	)
 	if err != nil {

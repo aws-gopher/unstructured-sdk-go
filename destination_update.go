@@ -35,7 +35,7 @@ func (c *Client) UpdateDestination(ctx context.Context, in UpdateDestinationRequ
 
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodPut,
-		c.endpoint.JoinPath("/destinations", in.ID).String(),
+		c.endpoint.JoinPath("destinations", in.ID).String(),
 		bytes.NewReader(body),
 	)
 	if err != nil {

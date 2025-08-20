@@ -39,7 +39,6 @@ type Source struct {
 	Name      string       `json:"name"`
 	CreatedAt time.Time    `json:"created_at,omitzero"`
 	UpdatedAt time.Time    `json:"updated_at,omitzero"`
-	Type      string       `json:"type"`
 	Config    SourceConfig `json:"config"`
 }
 
@@ -64,7 +63,6 @@ func (s *Source) UnmarshalJSON(data []byte) error {
 	s.Name = shadow.Name
 	s.CreatedAt = shadow.CreatedAt
 	s.UpdatedAt = shadow.UpdatedAt
-	s.Type = shadow.Type
 
 	// Look up the factory function for this source type
 	factory, exists := sourceConfigFactories[shadow.Type]

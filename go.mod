@@ -1,3 +1,3 @@
 module github.com/aws-gopher/unstructured-sdk-go
 
-go 1.24.5
+go 1.25.0

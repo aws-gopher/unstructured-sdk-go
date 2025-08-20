@@ -10,7 +10,7 @@ import (
 func (c *Client) GetSource(ctx context.Context, id string) (*Source, error) {
 	req, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
-		c.endpoint.JoinPath("/sources", id).String(),
+		c.endpoint.JoinPath("sources", id).String(),
 		nil,
 	)
 	if err != nil {
