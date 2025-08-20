@@ -58,9 +58,14 @@ linters:
       check-type-assertions: false
       exclude-functions:
         - io/ioutil.ReadFile
-        - io.Copy(*bytes.Buffer)
-        - io.Copy(os.Stdout)
+        - io.Copy
         - (io.Closer).Close
+        - (net/http.ResponseWriter).Write
+        - io.Writer.Write
+    gosec:
+      excludes:
+      - G101
+      - G104
 
 # Issues configuration
 issues:

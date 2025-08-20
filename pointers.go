@@ -47,3 +47,20 @@ func ToInt(p *int) int {
 
 	return *p
 }
+
+// Ptr returns a pointer to the given value.
+// This is useful when you need to pass optional values to API requests.
+func Ptr[T any](v T) *T {
+	return &v
+}
+
+// ToVal converts a pointer to a value.
+// If the pointer is nil, it returns the zero value of the type.
+func ToVal[T any](p *T) T {
+	if p == nil {
+		var val T
+		return val
+	}
+
+	return *p
+}

@@ -3,6 +3,7 @@ package unstructured
 import (
 	"cmp"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -123,11 +124,17 @@ func (c *Client) do(req *http.Request, out any) error {
 		if resp.StatusCode == http.StatusUnprocessableEntity {
 			var validationErr HTTPValidationError
 			if err := json.Unmarshal(body, &validationErr); err == nil {
-				return &validationErr
+				return &APIError{
+					Code: resp.StatusCode,
+					Err:  &validationErr,
+				}
 			}
 		}
 
-		return fmt.Errorf("[%s]: %s", resp.Status, string(body))
+		return &APIError{
+			Code: resp.StatusCode,
+			Err:  errors.New(string(body)),
+		}
 	}
 
 	if out != nil {

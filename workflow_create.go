@@ -20,7 +20,7 @@ type CreateWorkflowRequest struct {
 }
 
 // CreateWorkflow creates a new workflow
-func (c *Client) CreateWorkflow(ctx context.Context, in CreateWorkflowRequest) (*Workflow, error) {
+func (c *Client) CreateWorkflow(ctx context.Context, in *CreateWorkflowRequest) (*Workflow, error) {
 	body, err := json.Marshal(in)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal workflow request: %w", err)
