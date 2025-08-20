@@ -15,9 +15,14 @@ import (
 	"github.com/aws-gopher/unstructured-sdk-go"
 )
 
+var S = unstructured.String
+var I = unstructured.Int
+var B = unstructured.Bool
+
 func TestWorkflow(t *testing.T) {
-	key := os.Getenv("UNSTRUCTURED_API_KEY")
-	if key == "" {
+	t.Parallel()
+
+	if os.Getenv("UNSTRUCTURED_API_KEY") == "" {
 		t.Skip("skipping because UNSTRUCTURED_API_KEY is not set")
 	}
 
@@ -30,9 +35,7 @@ func TestWorkflow(t *testing.T) {
 		return string(data)
 	}
 
-	client, err := unstructured.New(
-		unstructured.WithKey(key),
-	)
+	client, err := unstructured.New()
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
