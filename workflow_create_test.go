@@ -32,7 +32,6 @@ func TestCreateWorkflow(t *testing.T) {
 
 	workflow, err := client.CreateWorkflow(t.Context(), &CreateWorkflowRequest{
 		Name:          "test_workflow",
-		WorkflowType:  WorkflowTypeAdvanced,
 		Schedule:      String("weekly"),
 		SourceID:      String("f1f7b1b2-8e4b-4a2b-8f1d-3e3c7c9e5a3c"),
 		DestinationID: String("aeebecc7-9d8e-4625-bf1d-815c2f084869"),

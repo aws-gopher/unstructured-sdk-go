@@ -56,7 +56,7 @@ func TestListDestinations(t *testing.T) {
 		t.Error(err)
 	}
 
-	cfg, ok := destination.Config.(*S3DestinationConnectorConfig)
+	cfg, ok := destination.Config.(*S3ConnectorConfig)
 	if !ok {
 		t.Errorf("expected destination config to be %T, got %T", cfg, destination.Config)
 	}

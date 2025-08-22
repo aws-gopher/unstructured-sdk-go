@@ -24,45 +24,51 @@ func TestSourcePermutations(t *testing.T) {
 		t.Fatalf("failed to create client: %v", err)
 	}
 
-	for name, src := range map[string]unstructured.SourceConfigInput{
-		"azure-account-key": unstructured.AzureSourceConnectorConfigInput{
+	for name, src := range map[string]unstructured.SourceConfig{
+		"azure-account-key": &unstructured.AzureSourceConnectorConfig{
 			RemoteURL:   "az://foo",
 			AccountName: S("foo"),
 			AccountKey:  S("foo"),
 		},
-		"azure-connection-string": unstructured.AzureSourceConnectorConfigInput{
+		"azure-connection-string": &unstructured.AzureSourceConnectorConfig{
 			RemoteURL:        "az://foo",
 			ConnectionString: S("foo"),
 		},
-		"azure-sas-token": unstructured.AzureSourceConnectorConfigInput{
+		"azure-sas-token": &unstructured.AzureSourceConnectorConfig{
 			RemoteURL:   "az://foo",
 			AccountName: S("foo"),
 			SASToken:    S("foo"),
 		},
 
-		"box": unstructured.BoxSourceConnectorConfigInput{
+		"box": &unstructured.BoxSourceConnectorConfig{
 			BoxAppConfig: "foo",
 			RemoteURL:    "box://foo",
 		},
 
 		// server responds 500
-		// "confluence": unstructured.ConfluenceSourceConnectorConfigInput{
+		// "confluence-password": unstructured.ConfluenceSourceConnectorConfig{
 		// 	URL:      "https://foo.atlassian.net",
 		// 	Username: "foo",
 		// 	Password: S("foo"),
 		// },
 
-		"couchbase": unstructured.CouchbaseSourceConnectorConfigInput{
+		// "confluence-token": unstructured.ConfluenceSourceConnectorConfig{
+		//	URL:      "https://foo.atlassian.net",
+		//	Username: "foo",
+		//	Token:    S("foo"),
+		// },
+
+		"couchbase": &unstructured.CouchbaseConnectorConfig{
 			Bucket:           "foo",
 			ConnectionString: "couchbase://foo",
 			Username:         "foo",
 			Password:         "foo",
-			CollectionID:     "foo",
+			CollectionID:     S("foo"),
 			BatchSize:        100,
 		},
 
 		// server responds 500
-		// "databricks-volumes": unstructured.DatabricksVolumesConnectorConfigInput{
+		// "databricks-volumes": unstructured.DatabricksVolumesConnectorConfig{
 		// 	Host:         "foo.cloud.databricks.com",
 		// 	Catalog:      "foo",
 		// 	Volume:       "foo",
@@ -71,64 +77,64 @@ func TestSourcePermutations(t *testing.T) {
 		// 	ClientID:     "foo",
 		// },
 
-		"dropbox": unstructured.DropboxSourceConnectorConfigInput{
+		"dropbox": &unstructured.DropboxSourceConnectorConfig{
 			Token:     "foo",
 			RemoteURL: "dropbox://foo",
 		},
 
-		"elasticsearch": unstructured.ElasticsearchConnectorConfigInput{
+		"elasticsearch": &unstructured.ElasticsearchConnectorConfig{
 			Hosts:     []string{"https://foo.elastic-cloud.com"},
 			IndexName: "foo",
 			ESAPIKey:  "foo",
 		},
 
-		"gcs": unstructured.GCSSourceConnectorConfigInput{
+		"gcs": &unstructured.GCSConnectorConfig{
 			RemoteURL:         "gs://foo",
 			ServiceAccountKey: "foo",
 		},
 
-		"google-drive": unstructured.GoogleDriveSourceConnectorConfigInput{
+		"google-drive": &unstructured.GoogleDriveSourceConnectorConfig{
 			DriveID:           "foo",
 			ServiceAccountKey: S("foo"),
 		},
 
-		"jira": unstructured.JiraSourceConnectorConfigInput{
+		"jira": &unstructured.JiraSourceConnectorConfig{
 			URL:      "https://foo.atlassian.net",
 			Username: "foo",
 			Password: S("foo"),
 		},
 
 		// server responds 412 asking for `bootstrap_server` instead of `bootstrap_servers`
-		// "kafka-cloud": unstructured.KafkaCloudSourceConnectorConfigInput{
+		// "kafka-cloud": unstructured.KafkaCloudSourceConnectorConfig{
 		// 	BootstrapServers: "foo.cloud.confluent.io",
 		// 	Topic:            "foo",
 		// 	KafkaAPIKey:      "foo",
 		// 	Secret:           "foo",
 		// },
 
-		"mongodb": unstructured.MongoDBConnectorConfigInput{
+		"mongodb": &unstructured.MongoDBConnectorConfig{
 			Database:   "foo",
 			Collection: "foo",
 			URI:        "mongodb://foo",
 		},
 
-		"onedrive": unstructured.OneDriveSourceConnectorConfigInput{
+		"onedrive": &unstructured.OneDriveConnectorConfig{
 			ClientID:     "foo",
 			UserPName:    "foo",
 			Tenant:       "foo",
 			AuthorityURL: "https://login.microsoftonline.com/foo",
 			ClientCred:   "foo",
-			Path:         "/foo",
+			Path:         S("/foo"),
 		},
 
-		"outlook": unstructured.OutlookSourceConnectorConfigInput{
+		"outlook": &unstructured.OutlookSourceConnectorConfig{
 			ClientID:       "foo",
 			ClientCred:     "foo",
 			UserEmail:      "foo@example.com",
 			OutlookFolders: []string{"Inbox"},
 		},
 
-		"postgres": unstructured.PostgresSourceConnectorConfigInput{
+		"postgres": &unstructured.PostgresConnectorConfig{
 			Host:      "foo.com",
 			Database:  "foo",
 			Port:      5432,
@@ -138,20 +144,20 @@ func TestSourcePermutations(t *testing.T) {
 			BatchSize: 100,
 		},
 
-		"s3": unstructured.S3SourceConnectorConfigInput{
+		"s3": &unstructured.S3ConnectorConfig{
 			RemoteURL: "s3://foo",
 			Key:       S("foo"),
 			Secret:    S("foo"),
 		},
 
-		"salesforce": unstructured.SalesforceSourceConnectorConfigInput{
+		"salesforce": &unstructured.SalesforceSourceConnectorConfig{
 			Username:    "foo",
 			ConsumerKey: "foo",
 			PrivateKey:  "foo",
 			Categories:  []string{"foo"},
 		},
 
-		"sharepoint": unstructured.SharePointSourceConnectorConfigInput{
+		"sharepoint": &unstructured.SharePointSourceConnectorConfig{
 			Site:       "https://foo.sharepoint.com/sites/foo",
 			Tenant:     "foo",
 			UserPName:  "foo",
@@ -160,7 +166,7 @@ func TestSourcePermutations(t *testing.T) {
 		},
 
 		// server responds 500
-		// "snowflake": unstructured.SnowflakeSourceConnectorConfigInput{
+		// "snowflake": unstructured.SnowflakeSourceConnectorConfig{
 		// 	Account:   "foo",
 		// 	Role:      "foo",
 		// 	User:      "foo",
@@ -171,7 +177,7 @@ func TestSourcePermutations(t *testing.T) {
 		// 	IDColumn:  S("foo"),
 		// },
 
-		"zendesk": unstructured.ZendeskSourceConnectorConfigInput{
+		"zendesk": &unstructured.ZendeskSourceConnectorConfig{
 			Subdomain: "foo",
 			Email:     "foo@example.com",
 			APIToken:  "foo",

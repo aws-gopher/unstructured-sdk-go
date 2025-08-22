@@ -35,7 +35,7 @@ func TestCreateDestination(t *testing.T) {
 	destination, err := client.CreateDestination(t.Context(), CreateDestinationRequest{
 		Name: "test_destination_name",
 
-		Config: &S3DestinationConnectorConfigInput{
+		Config: &S3ConnectorConfig{
 			RemoteURL: "s3://mock-s3-connector",
 			Key:       String("blah"),
 			Secret:    String("blah"),
@@ -53,7 +53,7 @@ func TestCreateDestination(t *testing.T) {
 		t.Error(err)
 	}
 
-	cfg, ok := destination.Config.(*S3DestinationConnectorConfig)
+	cfg, ok := destination.Config.(*S3ConnectorConfig)
 	if !ok {
 		t.Errorf("expected destination config to be %T, got %T", cfg, destination.Config)
 	}

@@ -11,7 +11,7 @@ import (
 // UpdateSourceRequest represents the request to update a source connector.
 type UpdateSourceRequest struct {
 	ID     string
-	Config SourceConfigInput
+	Config SourceConfig
 }
 
 // UpdateSource updates the configuration of an existing source connector.

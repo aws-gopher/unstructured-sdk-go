@@ -45,14 +45,14 @@ func TestUpdateSource(t *testing.T) {
 
 	source, err := client.UpdateSource(t.Context(), UpdateSourceRequest{
 		ID: id,
-		Config: &OneDriveSourceConnectorConfigInput{
+		Config: &OneDriveConnectorConfig{
 			ClientID:     "foo",
 			Tenant:       "foo",
 			AuthorityURL: "foo",
 			UserPName:    "foo",
 			ClientCred:   "foo",
 			Recursive:    Bool(false),
-			Path:         "foo",
+			Path:         String("foo"),
 		},
 	})
 	if err != nil {
@@ -67,7 +67,7 @@ func TestUpdateSource(t *testing.T) {
 		t.Error(err)
 	}
 
-	cfg, ok := source.Config.(*OneDriveSourceConnectorConfig)
+	cfg, ok := source.Config.(*OneDriveConnectorConfig)
 	if !ok {
 		t.Errorf("expected source config to be %T, got %T", cfg, source.Config)
 	}
