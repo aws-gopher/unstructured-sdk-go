@@ -32,7 +32,7 @@ func TestCreateDestination(t *testing.T) {
 		w.Write(response)
 	}
 
-	destination, err := client.CreateDestination(t.Context(), CreateDestinationRequest{
+	destination, err := client.CreateDestination(testContext(t), CreateDestinationRequest{
 		Name: "test_destination_name",
 
 		Config: &S3ConnectorConfig{

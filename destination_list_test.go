@@ -37,7 +37,7 @@ func TestListDestinations(t *testing.T) {
 		w.Write(response)
 	}
 
-	destinations, err := client.ListDestinations(t.Context(), "")
+	destinations, err := client.ListDestinations(testContext(t), "")
 	if err != nil {
 		t.Fatalf("failed to list destinations: %v", err)
 	}
@@ -74,7 +74,7 @@ func TestListDestinationsEmpty(t *testing.T) {
 		w.Write([]byte("[]"))
 	}
 
-	destinations, err := client.ListDestinations(t.Context(), "")
+	destinations, err := client.ListDestinations(testContext(t), "")
 	if err != nil {
 		t.Fatalf("failed to list destinations: %v", err)
 	}
@@ -107,7 +107,7 @@ func TestListDestinationsErrorCode(t *testing.T) {
 				w.WriteHeader(code)
 			}
 
-			_, err := client.ListDestinations(t.Context(), "")
+			_, err := client.ListDestinations(testContext(t), "")
 			if err == nil {
 				t.Fatalf("expected error, got nil")
 			}

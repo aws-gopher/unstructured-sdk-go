@@ -33,7 +33,7 @@ func TestRunWorkflow(t *testing.T) {
 		w.Write(response)
 	}
 
-	job, err := client.RunWorkflow(t.Context(), &RunWorkflowRequest{ID: id})
+	job, err := client.RunWorkflow(testContext(t), &RunWorkflowRequest{ID: id})
 	if err != nil {
 		t.Fatalf("failed to run workflow: %v", err)
 	}

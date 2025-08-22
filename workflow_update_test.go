@@ -33,7 +33,7 @@ func TestUpdateWorkflow(t *testing.T) {
 		w.Write(response)
 	}
 
-	updated, err := client.UpdateWorkflow(t.Context(), UpdateWorkflowRequest{
+	updated, err := client.UpdateWorkflow(testContext(t), UpdateWorkflowRequest{
 		ID:            id,
 		Name:          String("test_workflow"),
 		WorkflowType:  Ptr(WorkflowTypeAdvanced),

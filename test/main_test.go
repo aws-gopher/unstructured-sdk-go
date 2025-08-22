@@ -41,7 +41,7 @@ func TestWorkflow(t *testing.T) {
 		t.Fatalf("failed to create client: %v", err)
 	}
 
-	ctx := t.Context()
+	ctx := testContext(t)
 
 	workflow, err := client.CreateWorkflow(ctx, &unstructured.CreateWorkflowRequest{
 		Name: "test",

@@ -34,7 +34,7 @@ func TestCreateSource(t *testing.T) {
 		w.Write(response)
 	}
 
-	source, err := client.CreateSource(t.Context(), CreateSourceRequest{
+	source, err := client.CreateSource(testContext(t), CreateSourceRequest{
 		Name: "test_source_name",
 		Config: &OneDriveConnectorConfig{
 			ClientID:     "foo",

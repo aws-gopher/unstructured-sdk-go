@@ -41,7 +41,7 @@ func TestGetSource(t *testing.T) {
 		w.Write(response)
 	}
 
-	source, err := client.GetSource(t.Context(), id)
+	source, err := client.GetSource(testContext(t), id)
 	if err != nil {
 		t.Fatalf("failed to get source: %v", err)
 	}
@@ -70,7 +70,7 @@ func TestGetSourceNotFound(t *testing.T) {
 		http.Error(w, "source ID "+r.PathValue("id")+" not found", http.StatusNotFound)
 	}
 
-	_, err := client.GetSource(t.Context(), id)
+	_, err := client.GetSource(testContext(t), id)
 	if err == nil {
 		t.Fatalf("expected error, got nil")
 	}

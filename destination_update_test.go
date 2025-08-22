@@ -40,7 +40,7 @@ func TestUpdateDestination(t *testing.T) {
 		w.Write(response)
 	}
 
-	updated, err := client.UpdateDestination(t.Context(), UpdateDestinationRequest{
+	updated, err := client.UpdateDestination(testContext(t), UpdateDestinationRequest{
 		ID: id,
 		Config: &S3ConnectorConfig{
 			RemoteURL: "s3://mock-s3-connector",

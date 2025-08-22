@@ -34,7 +34,7 @@ func TestListWorkflows(t *testing.T) {
 		w.Write(response)
 	}
 
-	workflows, err := client.ListWorkflows(t.Context(), &ListWorkflowsRequest{
+	workflows, err := client.ListWorkflows(testContext(t), &ListWorkflowsRequest{
 		SortBy: String("id"),
 	})
 	if err != nil {
@@ -73,7 +73,7 @@ func TestListWorkflowsEmpty(t *testing.T) {
 		w.Write(response)
 	}
 
-	workflows, err := client.ListWorkflows(t.Context(), &ListWorkflowsRequest{
+	workflows, err := client.ListWorkflows(testContext(t), &ListWorkflowsRequest{
 		SortBy: String("id"),
 	})
 	if err != nil {
@@ -108,7 +108,7 @@ func TestListWorkflowsErrorCode(t *testing.T) {
 				w.WriteHeader(code)
 			}
 
-			_, err := client.ListWorkflows(t.Context(), &ListWorkflowsRequest{
+			_, err := client.ListWorkflows(testContext(t), &ListWorkflowsRequest{
 				SortBy: String("id"),
 			})
 			if err == nil {

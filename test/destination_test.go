@@ -200,7 +200,7 @@ func TestDestinationPermutations(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			destination, err := client.CreateDestination(t.Context(), unstructured.CreateDestinationRequest{
+			destination, err := client.CreateDestination(testContext(t), unstructured.CreateDestinationRequest{
 				Name:   fmt.Sprintf("test-%s-%s", name, rand.Text()),
 				Config: src,
 			})
