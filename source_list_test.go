@@ -38,7 +38,7 @@ func TestListSources(t *testing.T) {
 		w.Write(response)
 	}
 
-	sources, err := client.ListSources(t.Context(), "")
+	sources, err := client.ListSources(testContext(t), "")
 	if err != nil {
 		t.Fatalf("failed to list sources: %v", err)
 	}
@@ -75,7 +75,7 @@ func TestListSourcesEmpty(t *testing.T) {
 		w.Write(response)
 	}
 
-	sources, err := client.ListSources(t.Context(), "")
+	sources, err := client.ListSources(testContext(t), "")
 	if err != nil {
 		t.Fatalf("failed to list sources: %v", err)
 	}
@@ -108,7 +108,7 @@ func TestListSourcesErrorCode(t *testing.T) {
 				w.WriteHeader(code)
 			}
 
-			_, err := client.ListSources(t.Context(), "")
+			_, err := client.ListSources(testContext(t), "")
 			if err == nil {
 				t.Fatalf("expected error, got nil")
 			}

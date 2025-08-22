@@ -27,7 +27,7 @@ func TestDeleteSource(t *testing.T) {
 		w.Write(response)
 	}
 
-	err := client.DeleteSource(t.Context(), id)
+	err := client.DeleteSource(testContext(t), id)
 	if err != nil {
 		t.Fatalf("failed to delete source: %v", err)
 	}

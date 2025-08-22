@@ -30,7 +30,7 @@ func TestCancelJob(t *testing.T) {
 		w.Write(response)
 	}
 
-	err := client.CancelJob(t.Context(), id)
+	err := client.CancelJob(testContext(t), id)
 	if err != nil {
 		t.Fatalf("failed to cancel job: %v", err)
 	}

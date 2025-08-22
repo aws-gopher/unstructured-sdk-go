@@ -40,7 +40,7 @@ func TestGetDestination(t *testing.T) {
 		w.Write(response)
 	}
 
-	destination, err := client.GetDestination(t.Context(), id)
+	destination, err := client.GetDestination(testContext(t), id)
 	if err != nil {
 		t.Fatalf("failed to get destination: %v", err)
 	}
@@ -70,7 +70,7 @@ func TestGetDestinationNotFound(t *testing.T) {
 		http.Error(w, "destination ID "+r.PathValue("id")+" not found", http.StatusNotFound)
 	}
 
-	_, err := client.GetDestination(t.Context(), id)
+	_, err := client.GetDestination(testContext(t), id)
 	if err == nil {
 		t.Fatalf("expected error, got nil")
 	}

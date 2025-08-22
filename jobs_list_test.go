@@ -30,7 +30,7 @@ func TestListJobs(t *testing.T) {
 		w.Write(response)
 	}
 
-	jobs, err := client.ListJobs(t.Context(), &ListJobsRequest{})
+	jobs, err := client.ListJobs(testContext(t), &ListJobsRequest{})
 	if err != nil {
 		t.Fatalf("failed to list jobs: %v", err)
 	}

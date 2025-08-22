@@ -43,7 +43,7 @@ func TestUpdateSource(t *testing.T) {
 		w.Write(response)
 	}
 
-	source, err := client.UpdateSource(t.Context(), UpdateSourceRequest{
+	source, err := client.UpdateSource(testContext(t), UpdateSourceRequest{
 		ID: id,
 		Config: &OneDriveConnectorConfig{
 			ClientID:     "foo",

@@ -36,7 +36,7 @@ func TestGetJob(t *testing.T) {
 		w.Write(response)
 	}
 
-	job, err := client.GetJob(t.Context(), id)
+	job, err := client.GetJob(testContext(t), id)
 	if err != nil {
 		t.Fatalf("failed to get job: %v", err)
 	}
@@ -62,7 +62,7 @@ func TestGetJobNotFound(t *testing.T) {
 		http.Error(w, "job ID "+r.PathValue("id")+" not found", http.StatusNotFound)
 	}
 
-	_, err := client.GetJob(t.Context(), id)
+	_, err := client.GetJob(testContext(t), id)
 	if err == nil {
 		t.Fatalf("expected error, got nil")
 	}
@@ -102,7 +102,7 @@ func TestGetJobError(t *testing.T) {
 				w.WriteHeader(code)
 			}
 
-			_, err := client.GetJob(t.Context(), id)
+			_, err := client.GetJob(testContext(t), id)
 			if err == nil {
 				t.Fatalf("expected error, got nil")
 			}

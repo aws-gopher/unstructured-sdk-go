@@ -186,7 +186,7 @@ func TestSourcePermutations(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			source, err := client.CreateSource(t.Context(), unstructured.CreateSourceRequest{
+			source, err := client.CreateSource(testContext(t), unstructured.CreateSourceRequest{
 				Name:   fmt.Sprintf("test-%s-%s", name, rand.Text()),
 				Config: src,
 			})

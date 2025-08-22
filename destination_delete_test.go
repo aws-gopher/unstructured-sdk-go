@@ -27,7 +27,7 @@ func TestDeleteDestination(t *testing.T) {
 		w.Write(response)
 	}
 
-	err := client.DeleteDestination(t.Context(), "b25d4161-77a0-4e08-b65e-86f398ce15ad")
+	err := client.DeleteDestination(testContext(t), "b25d4161-77a0-4e08-b65e-86f398ce15ad")
 	if err != nil {
 		t.Fatalf("failed to delete destination: %v", err)
 	}
