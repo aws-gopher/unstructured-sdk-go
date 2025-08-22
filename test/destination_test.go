@@ -4,7 +4,6 @@ package test
 
 import (
 	"context"
-	"crypto/rand"
 	"fmt"
 	"os"
 	"testing"
@@ -201,7 +200,7 @@ func TestDestinationPermutations(t *testing.T) {
 			t.Parallel()
 
 			destination, err := client.CreateDestination(testContext(t), unstructured.CreateDestinationRequest{
-				Name:   fmt.Sprintf("test-%s-%s", name, rand.Text()),
+				Name:   fmt.Sprintf("test-%s-%s", name, randText()),
 				Config: src,
 			})
 			if err != nil {

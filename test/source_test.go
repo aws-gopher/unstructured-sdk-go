@@ -4,7 +4,6 @@ package test
 
 import (
 	"context"
-	"crypto/rand"
 	"fmt"
 	"os"
 	"testing"
@@ -187,7 +186,7 @@ func TestSourcePermutations(t *testing.T) {
 			t.Parallel()
 
 			source, err := client.CreateSource(testContext(t), unstructured.CreateSourceRequest{
-				Name:   fmt.Sprintf("test-%s-%s", name, rand.Text()),
+				Name:   fmt.Sprintf("test-%s-%s", name, randText()),
 				Config: src,
 			})
 			if err != nil {
