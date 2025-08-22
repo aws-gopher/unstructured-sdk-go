@@ -12,7 +12,7 @@ type WorkflowNodes []WorkflowNode
 // ValidateNodeOrder validates the order of nodes in a workflow.
 func (w WorkflowNodes) ValidateNodeOrder() (err error) {
 	if len(w) == 0 {
-		return nil
+		return errors.New("first node must be a partitioner")
 	}
 
 	// you have to partition.
@@ -25,8 +25,14 @@ func (w WorkflowNodes) ValidateNodeOrder() (err error) {
 
 	last := nodeTypePartition
 
+	var (
+		didEnrichTable bool
+		didEnrichNER   bool
+		didEnrichImage bool
+	)
+
 	for i, node := range w[1:] {
-		switch node.(type) {
+		switch node := node.(type) {
 		case *PartitionerAuto, *PartitionerVLM, *PartitionerHiRes, *PartitionerFast:
 			err = errors.Join(err, errors.New("only the first node may be a partitioner"))
 
@@ -49,13 +55,34 @@ func (w WorkflowNodes) ValidateNodeOrder() (err error) {
 		case *Enricher:
 			// you can enrich before you chunk...
 			if i == len(w[1:])-1 {
-				err = errors.Join(err, errors.New("enricher must not be the last node"))
+				err = errors.Join(err, fmt.Errorf("%s must not be the last node", nodeTypeEnrich))
 			}
 
 			// and after you partition or enrich.
 			if last != nodeTypePartition && last != nodeTypeEnrich {
 				err = errors.Join(err, fmt.Errorf("%s must be after %s or %s", nodeTypeEnrich, nodeTypePartition, nodeTypeEnrich))
 			}
+
+			// you can only have one image enrichment.
+			if node.isImage() && didEnrichImage {
+				err = errors.Join(err, errors.New("only one image enrichment is allowed"))
+			}
+
+			didEnrichImage = node.isImage()
+
+			// you can only have one table enrichment.
+			if node.isTable() && didEnrichTable {
+				err = errors.Join(err, errors.New("only one table enrichment is allowed"))
+			}
+
+			didEnrichTable = node.isTable()
+
+			// you can only have one NER enrichment.
+			if node.isNER() && didEnrichNER {
+				err = errors.Join(err, errors.New("only one NER enrichment is allowed"))
+			}
+
+			didEnrichNER = node.isNER()
 
 			last = nodeTypeEnrich
 
@@ -66,11 +93,6 @@ func (w WorkflowNodes) ValidateNodeOrder() (err error) {
 
 	return err
 }
-
-type (
-	// Embedder represents an embedding node in a workflow.
-	Embedder struct{ WorkflowNode }
-)
 
 // MarshalJSON implements the json.Marshaler interface.
 func (w WorkflowNodes) MarshalJSON() ([]byte, error) {
@@ -159,5 +181,3 @@ func unmarshalNode(data []byte) (WorkflowNode, error) {
 
 	return nil, fmt.Errorf("unknown node type: %s", header.Type)
 }
-
-func unmarshalEmbedder(_ header) (WorkflowNode, error) { return &Embedder{}, nil }

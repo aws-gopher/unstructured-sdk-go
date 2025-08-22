@@ -13,7 +13,6 @@ type CreateWorkflowRequest struct {
 	Name          string         `json:"name"`
 	SourceID      *string        `json:"source_id,omitempty"`
 	DestinationID *string        `json:"destination_id,omitempty"`
-	WorkflowType  WorkflowType   `json:"workflow_type"`
 	WorkflowNodes []WorkflowNode `json:"workflow_nodes,omitempty"`
 	Schedule      *string        `json:"schedule,omitempty"`
 	ReprocessAll  *bool          `json:"reprocess_all,omitempty"`
@@ -21,7 +20,13 @@ type CreateWorkflowRequest struct {
 
 // CreateWorkflow creates a new workflow
 func (c *Client) CreateWorkflow(ctx context.Context, in *CreateWorkflowRequest) (*Workflow, error) {
-	body, err := json.Marshal(in)
+	body, err := json.Marshal(struct {
+		*CreateWorkflowRequest
+		WorkflowType WorkflowType `json:"workflow_type"`
+	}{
+		CreateWorkflowRequest: in,
+		WorkflowType:          WorkflowTypeCustom,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal workflow request: %w", err)
 	}

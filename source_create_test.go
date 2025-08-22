@@ -36,13 +36,13 @@ func TestCreateSource(t *testing.T) {
 
 	source, err := client.CreateSource(t.Context(), CreateSourceRequest{
 		Name: "test_source_name",
-		Config: &OneDriveSourceConnectorConfigInput{
+		Config: &OneDriveConnectorConfig{
 			ClientID:     "foo",
 			Tenant:       "foo",
 			AuthorityURL: "foo",
 			UserPName:    "foo",
 			ClientCred:   "foo",
-			Path:         "foo",
+			Path:         String("foo"),
 		},
 	})
 	if err != nil {
@@ -57,7 +57,7 @@ func TestCreateSource(t *testing.T) {
 		t.Error(err)
 	}
 
-	cfg, ok := source.Config.(*OneDriveSourceConnectorConfig)
+	cfg, ok := source.Config.(*OneDriveConnectorConfig)
 	if !ok {
 		t.Errorf("expected source config to be %T, got %T", cfg, source.Config)
 	}

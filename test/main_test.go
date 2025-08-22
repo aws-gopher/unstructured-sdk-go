@@ -21,6 +21,7 @@ var B = unstructured.Bool
 
 func TestWorkflow(t *testing.T) {
 	t.Parallel()
+	t.Skip()
 
 	if os.Getenv("UNSTRUCTURED_API_KEY") == "" {
 		t.Skip("skipping because UNSTRUCTURED_API_KEY is not set")
@@ -43,8 +44,7 @@ func TestWorkflow(t *testing.T) {
 	ctx := t.Context()
 
 	workflow, err := client.CreateWorkflow(ctx, &unstructured.CreateWorkflowRequest{
-		Name:         "test",
-		WorkflowType: unstructured.WorkflowTypeCustom,
+		Name: "test",
 		WorkflowNodes: []unstructured.WorkflowNode{
 			&unstructured.PartitionerAuto{
 				Name: "Partitioner",

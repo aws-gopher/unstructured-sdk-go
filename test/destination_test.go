@@ -24,20 +24,20 @@ func TestDestinationPermutations(t *testing.T) {
 		t.Fatalf("failed to create client: %v", err)
 	}
 
-	for name, src := range map[string]unstructured.DestinationConfigInput{
-		"astra-db": unstructured.AstraDBConnectorConfigInput{
+	for name, src := range map[string]unstructured.DestinationConfig{
+		"astra-db": &unstructured.AstraDBConnectorConfig{
 			CollectionName: "foo",
 			APIEndpoint:    "https://foo.apps.astra.datastax.com",
 			Token:          "foo",
 		},
 
-		"azure-ai-search": unstructured.AzureAISearchConnectorConfigInput{
+		"azure-ai-search": &unstructured.AzureAISearchConnectorConfig{
 			Endpoint: "https://foo.search.windows.net",
 			Index:    "foo",
 			Key:      "foo",
 		},
 
-		"couchbase": unstructured.CouchbaseDestinationConnectorConfigInput{
+		"couchbase": &unstructured.CouchbaseConnectorConfig{
 			Bucket:           "foo",
 			ConnectionString: "couchbase://foo",
 			Username:         "foo",
@@ -46,7 +46,7 @@ func TestDestinationPermutations(t *testing.T) {
 		},
 
 		// server responds 500
-		// "databricks-volume-delta-table": unstructured.DatabricksVDTDestinationConnectorConfigInput{
+		// "databricks-volume-delta-table": unstructured.DatabricksVDTDestinationConnectorConfig{
 		// 	ServerHostname: "foo.cloud.databricks.com",
 		// 	HTTPPath:       "/sql/1.0/warehouses/foo",
 		// 	Token:          S("foo"),
@@ -54,39 +54,39 @@ func TestDestinationPermutations(t *testing.T) {
 		// 	Volume:         "foo",
 		// },
 
-		"delta-table": unstructured.DeltaTableConnectorConfigInput{
+		"delta-table": &unstructured.DeltaTableConnectorConfig{
 			AwsAccessKeyID:     "foo",
 			AwsSecretAccessKey: "foo",
 			AwsRegion:          "us-east-1",
 			TableURI:           "s3://foo/table",
 		},
 
-		"elasticsearch": unstructured.ElasticsearchConnectorConfigInput{
+		"elasticsearch": &unstructured.ElasticsearchConnectorConfig{
 			Hosts:     []string{"https://foo.elastic-cloud.com"},
 			IndexName: "foo",
 			ESAPIKey:  "foo",
 		},
 
-		"gcs": unstructured.GCSDestinationConnectorConfigInput{
+		"gcs": &unstructured.GCSConnectorConfig{
 			RemoteURL:         "gs://foo",
 			ServiceAccountKey: "foo",
 		},
 
 		// server responds 412 asking for `bootstrap_server` instead of `bootstrap_servers`
-		// "kafka-cloud": unstructured.KafkaCloudDestinationConnectorConfigInput{
+		// "kafka-cloud": unstructured.KafkaCloudDestinationConnectorConfig{
 		// 	BootstrapServers: "foo.cloud.confluent.io",
 		// 	Topic:            "foo",
 		// 	KafkaAPIKey:      "foo",
 		// 	Secret:           "foo",
 		// },
 
-		"milvus-token": unstructured.MilvusDestinationConnectorConfigInput{
+		"milvus-token": &unstructured.MilvusDestinationConnectorConfig{
 			URI:            "https://foo.zilliz.com",
 			CollectionName: "foo",
 			RecordIDKey:    "foo",
 			Token:          S("foo"),
 		},
-		"milvus-password": unstructured.MilvusDestinationConnectorConfigInput{
+		"milvus-password": &unstructured.MilvusDestinationConnectorConfig{
 			URI:            "https://foo.zilliz.com",
 			CollectionName: "foo",
 			RecordIDKey:    "foo",
@@ -94,14 +94,14 @@ func TestDestinationPermutations(t *testing.T) {
 			Password:       S("foo"),
 		},
 
-		"mongo-db": unstructured.MongoDBConnectorConfigInput{
+		"mongo-db": &unstructured.MongoDBConnectorConfig{
 			Database:   "foo",
 			Collection: "foo",
 			URI:        "mongodb://foo:27017/foo",
 		},
 
 		// server responds 422: Destination Connector type motherduck not supported
-		// "mother-duck": unstructured.MotherduckDestinationConnectorConfigInput{
+		// "mother-duck": unstructured.MotherduckDestinationConnectorConfig{
 		// 	Account:  "foo",
 		// 	Role:     "foo",
 		// 	User:     "foo",
@@ -110,29 +110,29 @@ func TestDestinationPermutations(t *testing.T) {
 		// 	Database: "foo",
 		// },
 
-		"neo4j": unstructured.Neo4jDestinationConnectorConfigInput{
+		"neo4j": &unstructured.Neo4jDestinationConnectorConfig{
 			URI:      "bolt://foo:7687",
 			Database: "foo",
 			Username: "foo",
 			Password: "foo",
 		},
 
-		"one-drive": unstructured.OneDriveDestinationConnectorConfigInput{
+		"one-drive": &unstructured.OneDriveConnectorConfig{
 			ClientID:     "foo",
 			UserPName:    "foo",
 			Tenant:       "foo",
 			AuthorityURL: "https://login.microsoftonline.com/foo",
 			ClientCred:   "foo",
-			RemoteURL:    "onedrive://foo",
+			RemoteURL:    S("onedrive://foo"),
 		},
 
-		"pinecone": unstructured.PineconeDestinationConnectorConfigInput{
+		"pinecone": &unstructured.PineconeDestinationConnectorConfig{
 			IndexName: "foo",
 			APIKey:    "foo",
 			Namespace: "foo",
 		},
 
-		"postgres": unstructured.PostgresDestinationConnectorConfigInput{
+		"postgres": &unstructured.PostgresConnectorConfig{
 			Host:      "foo.com",
 			Database:  "foo",
 			Port:      5432,
@@ -142,26 +142,26 @@ func TestDestinationPermutations(t *testing.T) {
 			BatchSize: 100,
 		},
 
-		"redis": unstructured.RedisDestinationConnectorConfigInput{
+		"redis": &unstructured.RedisDestinationConnectorConfig{
 			Host:     "foo.com",
 			Username: S("foo"),
 			Password: S("foo"),
 		},
 
-		"qdrant-cloud": unstructured.QdrantCloudDestinationConnectorConfigInput{
+		"qdrant-cloud": &unstructured.QdrantCloudDestinationConnectorConfig{
 			URL:            "https://foo.qdrant.io",
 			APIKey:         "foo",
 			CollectionName: "foo",
 		},
 
-		"s3": unstructured.S3DestinationConnectorConfigInput{
+		"s3": &unstructured.S3ConnectorConfig{
 			RemoteURL: "s3://foo",
 			Key:       S("foo"),
 			Secret:    S("foo"),
 		},
 
 		// server responds 500
-		// "snowflake": unstructured.SnowflakeDestinationConnectorConfigInput{
+		// "snowflake": unstructured.SnowflakeDestinationConnectorConfig{
 		// 	Account:  "foo",
 		// 	Role:     "foo",
 		// 	User:     "foo",
@@ -170,12 +170,12 @@ func TestDestinationPermutations(t *testing.T) {
 		// 	Database: "foo",
 		// },
 
-		"weaviate-cloud": unstructured.WeaviateDestinationConnectorConfigInput{
+		"weaviate-cloud": &unstructured.WeaviateDestinationConnectorConfig{
 			ClusterURL: "https://foo.weaviate.network",
 			APIKey:     "foo",
 		},
 
-		"ibm-watsonx-s3": unstructured.IBMWatsonxS3DestinationConnectorConfigInput{
+		"ibm-watsonx-s3": &unstructured.IBMWatsonxS3DestinationConnectorConfig{
 			IAMApiKey:             "foo",
 			AccessKeyID:           "foo",
 			SecretAccessKey:       "foo",
@@ -188,7 +188,7 @@ func TestDestinationPermutations(t *testing.T) {
 		},
 
 		// server responds 500
-		// "databricks-volumes": unstructured.DatabricksVolumesConnectorConfigInput{
+		// "databricks-volumes": unstructured.DatabricksVolumesConnectorConfig{
 		// 	Host:         "foo.cloud.databricks.com",
 		// 	Catalog:      "foo",
 		// 	Volume:       "foo",

@@ -11,24 +11,24 @@ import (
 var destinationConfigFactories = map[string]func() DestinationConfig{
 	ConnectorTypeAstraDB:                    func() DestinationConfig { return new(AstraDBConnectorConfig) },
 	ConnectorTypeAzureAISearch:              func() DestinationConfig { return new(AzureAISearchConnectorConfig) },
-	ConnectorTypeCouchbase:                  func() DestinationConfig { return new(CouchbaseDestinationConnectorConfig) },
+	ConnectorTypeCouchbase:                  func() DestinationConfig { return new(CouchbaseConnectorConfig) },
 	ConnectorTypeDatabricksVolumes:          func() DestinationConfig { return new(DatabricksVolumesConnectorConfig) },
 	ConnectorTypeDatabricksVolumeDeltaTable: func() DestinationConfig { return new(DatabricksVDTDestinationConnectorConfig) },
 	ConnectorTypeDeltaTable:                 func() DestinationConfig { return new(DeltaTableConnectorConfig) },
 	ConnectorTypeElasticsearch:              func() DestinationConfig { return new(ElasticsearchConnectorConfig) },
-	ConnectorTypeGCS:                        func() DestinationConfig { return new(GCSDestinationConnectorConfig) },
-	ConnectorTypeKafkaCloud:                 func() DestinationConfig { return new(KafkaCloudDestinationConnectorConfig) },
+	ConnectorTypeGCS:                        func() DestinationConfig { return new(GCSConnectorConfig) },
+	ConnectorTypeKafkaCloud:                 func() DestinationConfig { return new(KafkaCloudConnectorConfig) },
 	ConnectorTypeMilvus:                     func() DestinationConfig { return new(MilvusDestinationConnectorConfig) },
 	ConnectorTypeMongoDB:                    func() DestinationConfig { return new(MongoDBConnectorConfig) },
 	ConnectorTypeMotherDuck:                 func() DestinationConfig { return new(MotherduckDestinationConnectorConfig) },
 	ConnectorTypeNeo4j:                      func() DestinationConfig { return new(Neo4jDestinationConnectorConfig) },
-	ConnectorTypeOneDrive:                   func() DestinationConfig { return new(OneDriveDestinationConnectorConfig) },
+	ConnectorTypeOneDrive:                   func() DestinationConfig { return new(OneDriveConnectorConfig) },
 	ConnectorTypePinecone:                   func() DestinationConfig { return new(PineconeDestinationConnectorConfig) },
-	ConnectorTypePostgres:                   func() DestinationConfig { return new(PostgresDestinationConnectorConfig) },
+	ConnectorTypePostgres:                   func() DestinationConfig { return new(PostgresConnectorConfig) },
 	ConnectorTypeRedis:                      func() DestinationConfig { return new(RedisDestinationConnectorConfig) },
 	ConnectorTypeQdrantCloud:                func() DestinationConfig { return new(QdrantCloudDestinationConnectorConfig) },
-	ConnectorTypeS3:                         func() DestinationConfig { return new(S3DestinationConnectorConfig) },
-	ConnectorTypeSnowflake:                  func() DestinationConfig { return new(SnowflakeDestinationConnectorConfig) },
+	ConnectorTypeS3:                         func() DestinationConfig { return new(S3ConnectorConfig) },
+	ConnectorTypeSnowflake:                  func() DestinationConfig { return new(SnowflakeConnectorConfig) },
 	ConnectorTypeWeaviateCloud:              func() DestinationConfig { return new(WeaviateDestinationConnectorConfig) },
 	ConnectorTypeIBMWatsonxS3:               func() DestinationConfig { return new(IBMWatsonxS3DestinationConnectorConfig) },
 }
@@ -90,6 +90,7 @@ func (d *Destination) UnmarshalJSON(data []byte) error {
 // It provides a way to identify and work with different destination connector types.
 type DestinationConfig interface {
 	isDestinationConfig()
+	Type() string
 }
 
 type destinationconfig struct{}
@@ -101,12 +102,18 @@ func (d destinationconfig) isDestinationConfig() {}
 type AstraDBConnectorConfig struct {
 	destinationconfig
 
-	CollectionName string  `json:"collection_name"`
-	Keyspace       *string `json:"keyspace,omitempty"`
-	BatchSize      int     `json:"batch_size"`
-	APIEndpoint    string  `json:"api_endpoint"`
-	Token          string  `json:"token"`
+	CollectionName  string  `json:"collection_name"`
+	Keyspace        *string `json:"keyspace,omitempty"`
+	BatchSize       *int    `json:"batch_size,omitempty"`
+	APIEndpoint     string  `json:"api_endpoint"`
+	Token           string  `json:"token"`
+	FlattenMetadata *bool   `json:"flatten_metadata,omitempty"`
 }
+
+var _ DestinationConfig = (*AstraDBConnectorConfig)(nil)
+
+// Type always returns the connector type identifier for AstraDB: "astra_db".
+func (c AstraDBConnectorConfig) Type() string { return ConnectorTypeAstraDB }
 
 // AzureAISearchConnectorConfig represents the configuration for an Azure AI Search destination connector.
 // It contains the endpoint, index name, and API key.
@@ -118,19 +125,10 @@ type AzureAISearchConnectorConfig struct {
 	Key      string `json:"key"`
 }
 
-// CouchbaseDestinationConnectorConfig represents the configuration for a Couchbase destination connector.
-// It contains connection details, bucket information, and authentication credentials.
-type CouchbaseDestinationConnectorConfig struct {
-	destinationconfig
+var _ DestinationConfig = (*AzureAISearchConnectorConfig)(nil)
 
-	Bucket           string  `json:"bucket"`
-	ConnectionString string  `json:"connection_string"`
-	Scope            *string `json:"scope,omitempty"`
-	Collection       *string `json:"collection,omitempty"`
-	BatchSize        int     `json:"batch_size"`
-	Username         string  `json:"username"`
-	Password         string  `json:"password"`
-}
+// Type always returns the connector type identifier for Azure AI Search: "azure_ai_search".
+func (c AzureAISearchConnectorConfig) Type() string { return ConnectorTypeAzureAISearch }
 
 // DatabricksVDTDestinationConnectorConfig represents the configuration for a Databricks Volume Delta Tables destination connector.
 // It contains server details, authentication, and table configuration.
@@ -150,6 +148,13 @@ type DatabricksVDTDestinationConnectorConfig struct {
 	VolumePath     *string `json:"volume_path,omitempty"`
 }
 
+var _ DestinationConfig = (*DatabricksVDTDestinationConnectorConfig)(nil)
+
+// Type always returns the connector type identifier for Databricks Volume Delta Table: "databricks_volume_delta_table".
+func (c DatabricksVDTDestinationConnectorConfig) Type() string {
+	return ConnectorTypeDatabricksVolumeDeltaTable
+}
+
 // DeltaTableConnectorConfig represents the configuration for a Delta Table destination connector.
 // It contains AWS credentials and table URI for Delta Lake storage.
 type DeltaTableConnectorConfig struct {
@@ -161,28 +166,10 @@ type DeltaTableConnectorConfig struct {
 	TableURI           string `json:"table_uri"`
 }
 
-// GCSDestinationConnectorConfig represents the configuration for a Google Cloud Storage destination connector.
-// It contains the remote URL and service account key for authentication.
-type GCSDestinationConnectorConfig struct {
-	destinationconfig
+var _ DestinationConfig = (*DeltaTableConnectorConfig)(nil)
 
-	RemoteURL         string `json:"remote_url"`
-	ServiceAccountKey string `json:"service_account_key"`
-}
-
-// KafkaCloudDestinationConnectorConfig represents the configuration for a Kafka Cloud destination connector.
-// It contains broker details, topic information, and authentication credentials.
-type KafkaCloudDestinationConnectorConfig struct {
-	destinationconfig
-
-	BootstrapServers string  `json:"bootstrap_servers"`
-	Port             *int    `json:"port,omitempty"`
-	GroupID          *string `json:"group_id,omitempty"`
-	Topic            string  `json:"topic"`
-	KafkaAPIKey      string  `json:"kafka_api_key"`
-	Secret           string  `json:"secret"`
-	BatchSize        *int    `json:"batch_size,omitempty"`
-}
+// Type always returns the connector type identifier for Delta Table: "delta_table".
+func (c DeltaTableConnectorConfig) Type() string { return ConnectorTypeDeltaTable }
 
 // MilvusDestinationConnectorConfig represents the configuration for a Milvus destination connector.
 // It contains connection details, collection information, and authentication.
@@ -198,6 +185,11 @@ type MilvusDestinationConnectorConfig struct {
 	RecordIDKey    string  `json:"record_id_key"`
 }
 
+var _ DestinationConfig = (*MilvusDestinationConnectorConfig)(nil)
+
+// Type always returns the connector type identifier for Milvus: "milvus".
+func (c MilvusDestinationConnectorConfig) Type() string { return ConnectorTypeMilvus }
+
 // Neo4jDestinationConnectorConfig represents the configuration for a Neo4j destination connector.
 // It contains database connection details and authentication credentials.
 type Neo4jDestinationConnectorConfig struct {
@@ -209,6 +201,11 @@ type Neo4jDestinationConnectorConfig struct {
 	Password  string `json:"password"`
 	BatchSize *int   `json:"batch_size,omitempty"`
 }
+
+var _ DestinationConfig = (*Neo4jDestinationConnectorConfig)(nil)
+
+// Type always returns the connector type identifier for Neo4j: "neo4j".
+func (c Neo4jDestinationConnectorConfig) Type() string { return ConnectorTypeNeo4j }
 
 // MotherduckDestinationConnectorConfig represents the configuration for a MotherDuck destination connector.
 // It contains database connection details and authentication credentials.
@@ -228,18 +225,10 @@ type MotherduckDestinationConnectorConfig struct {
 	RecordIDKey *string `json:"record_id_key,omitempty"`
 }
 
-// OneDriveDestinationConnectorConfig represents the configuration for a OneDrive destination connector.
-// It contains Microsoft Graph API authentication and file storage details.
-type OneDriveDestinationConnectorConfig struct {
-	destinationconfig
+var _ DestinationConfig = (*MotherduckDestinationConnectorConfig)(nil)
 
-	ClientID     string `json:"client_id"`
-	UserPName    string `json:"user_pname"`
-	Tenant       string `json:"tenant"`
-	AuthorityURL string `json:"authority_url"`
-	ClientCred   string `json:"client_cred"`
-	RemoteURL    string `json:"remote_url"`
-}
+// Type always returns the connector type identifier for MotherDuck: "mother_duck".
+func (c MotherduckDestinationConnectorConfig) Type() string { return ConnectorTypeMotherDuck }
 
 // PineconeDestinationConnectorConfig represents the configuration for a Pinecone destination connector.
 // It contains index details, API key, and namespace information.
@@ -252,19 +241,10 @@ type PineconeDestinationConnectorConfig struct {
 	BatchSize *int   `json:"batch_size,omitempty"`
 }
 
-// PostgresDestinationConnectorConfig represents the configuration for a PostgreSQL destination connector.
-// It contains database connection details and table configuration.
-type PostgresDestinationConnectorConfig struct {
-	destinationconfig
+var _ DestinationConfig = (*PineconeDestinationConnectorConfig)(nil)
 
-	Host      string `json:"host"`
-	Database  string `json:"database"`
-	Port      int    `json:"port"`
-	Username  string `json:"username"`
-	Password  string `json:"password"`
-	TableName string `json:"table_name"`
-	BatchSize int    `json:"batch_size"`
-}
+// Type always returns the connector type identifier for Pinecone: "pinecone".
+func (c PineconeDestinationConnectorConfig) Type() string { return ConnectorTypePinecone }
 
 // RedisDestinationConnectorConfig represents the configuration for a Redis destination connector.
 // It contains connection details, database selection, and authentication.
@@ -281,6 +261,11 @@ type RedisDestinationConnectorConfig struct {
 	BatchSize *int    `json:"batch_size,omitempty"`
 }
 
+var _ DestinationConfig = (*RedisDestinationConnectorConfig)(nil)
+
+// Type always returns the connector type identifier for Redis: "redis".
+func (c RedisDestinationConnectorConfig) Type() string { return ConnectorTypeRedis }
+
 // QdrantCloudDestinationConnectorConfig represents the configuration for a Qdrant Cloud destination connector.
 // It contains API endpoint, collection details, and authentication.
 type QdrantCloudDestinationConnectorConfig struct {
@@ -292,36 +277,10 @@ type QdrantCloudDestinationConnectorConfig struct {
 	BatchSize      *int   `json:"batch_size,omitempty"`
 }
 
-// S3DestinationConnectorConfig represents the configuration for an Amazon S3 destination connector.
-// It supports both AWS S3 and S3-compatible storage services for storing processed data.
-type S3DestinationConnectorConfig struct {
-	destinationconfig
+var _ DestinationConfig = (*QdrantCloudDestinationConnectorConfig)(nil)
 
-	RemoteURL   string  `json:"remote_url"`
-	Anonymous   bool    `json:"anonymous"`
-	Key         *string `json:"key,omitempty"`
-	Secret      *string `json:"secret,omitempty"`
-	Token       *string `json:"token,omitempty"`
-	EndpointURL *string `json:"endpoint_url,omitempty"`
-}
-
-// SnowflakeDestinationConnectorConfig represents the configuration for a Snowflake destination connector.
-// It contains account details, authentication, and table configuration.
-type SnowflakeDestinationConnectorConfig struct {
-	destinationconfig
-
-	Account     string  `json:"account"`
-	Role        string  `json:"role"`
-	User        string  `json:"user"`
-	Password    string  `json:"password"`
-	Host        string  `json:"host"`
-	Port        *int    `json:"port,omitempty"`
-	Database    string  `json:"database"`
-	Schema      *string `json:"schema,omitempty"`
-	TableName   *string `json:"table_name,omitempty"`
-	BatchSize   *int    `json:"batch_size,omitempty"`
-	RecordIDKey *string `json:"record_id_key,omitempty"`
-}
+// Type always returns the connector type identifier for Qdrant Cloud: "qdrant_cloud".
+func (c QdrantCloudDestinationConnectorConfig) Type() string { return ConnectorTypeQdrantCloud }
 
 // WeaviateDestinationConnectorConfig represents the configuration for a Weaviate destination connector.
 // It contains cluster URL, API key, and collection information.
@@ -332,6 +291,11 @@ type WeaviateDestinationConnectorConfig struct {
 	APIKey     string  `json:"api_key"`
 	Collection *string `json:"collection,omitempty"`
 }
+
+var _ DestinationConfig = (*WeaviateDestinationConnectorConfig)(nil)
+
+// Type always returns the connector type identifier for Weaviate Cloud: "weaviate_cloud".
+func (c WeaviateDestinationConnectorConfig) Type() string { return ConnectorTypeWeaviateCloud }
 
 // IBMWatsonxS3DestinationConnectorConfig represents the configuration for an IBM Watsonx S3 destination connector.
 // It contains IBM Cloud authentication, storage endpoints, and table configuration.
@@ -351,3 +315,8 @@ type IBMWatsonxS3DestinationConnectorConfig struct {
 	MaxRetries            *int    `json:"max_retries,omitempty"`
 	RecordIDKey           *string `json:"record_id_key,omitempty"`
 }
+
+var _ DestinationConfig = (*IBMWatsonxS3DestinationConnectorConfig)(nil)
+
+// Type always returns the connector type identifier for IBM Watsonx S3: "ibm_watsonx_s3".
+func (c IBMWatsonxS3DestinationConnectorConfig) Type() string { return ConnectorTypeIBMWatsonxS3 }

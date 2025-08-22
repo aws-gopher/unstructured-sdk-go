@@ -3,6 +3,7 @@ package unstructured
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 // Enricher is a node that enriches text.
@@ -33,7 +34,10 @@ const (
 
 var _ WorkflowNode = new(Enricher)
 
-func (e Enricher) isNode() {}
+func (e Enricher) isNode()       {}
+func (e Enricher) isImage() bool { return strings.Contains(string(e.Subtype), "image") }
+func (e Enricher) isTable() bool { return strings.Contains(string(e.Subtype), "table") }
+func (e Enricher) isNER() bool   { return strings.Contains(string(e.Subtype), "ner") }
 
 // MarshalJSON implements the json.Marshaler interface.
 func (e Enricher) MarshalJSON() ([]byte, error) {

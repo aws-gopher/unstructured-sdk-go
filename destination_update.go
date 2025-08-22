@@ -11,7 +11,7 @@ import (
 // UpdateDestinationRequest represents the request to update a destination connector.
 type UpdateDestinationRequest struct {
 	ID     string
-	Config DestinationConfigInput
+	Config DestinationConfig
 }
 
 // UpdateDestination updates the configuration of an existing destination connector.

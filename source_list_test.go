@@ -56,7 +56,7 @@ func TestListSources(t *testing.T) {
 		t.Error(err)
 	}
 
-	cfg, ok := source.Config.(*OneDriveSourceConnectorConfig)
+	cfg, ok := source.Config.(*OneDriveConnectorConfig)
 	if !ok {
 		t.Errorf("expected source config to be %T, got %T", cfg, source.Config)
 	}
